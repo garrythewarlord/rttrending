@@ -38,12 +38,19 @@ def get_new_tv_shows(page=3):
         criticsScore = clean_score(scores[0].text)
         audienceScore = clean_score(scores[-1].text)
 
+
+
+        last_episode_date = tv.find('span', class_='smaller')
+        if last_episode_date:
+            last_episode_date = last_episode_date.text.replace('\n', '').strip()
+        else:
+            last_episode_date = '-'
         
 
     
         trending_tv_titles[tv_name] = {
             'src_image': tv.find('rt-img').get('src'), # parse source image url
-            'last_episode_date': tv.find('span', class_='smaller').text.replace('\n', '').strip(), # parse last episode date
+            'last_episode_date': last_episode_date, # parse last episode date
             'critics_score': criticsScore,
             'audience_score': audienceScore
         }
@@ -76,9 +83,16 @@ def get_best_tv_shows(page=3):
         criticsScore = clean_score(scores[0].text)
         audienceScore = clean_score(scores[-1].text)
 
+        last_episode_date = tv.find('span', class_='smaller')
+        if last_episode_date:
+            last_episode_date = last_episode_date.text.replace('\n', '').strip()
+        else:
+            last_episode_date = '-'
+        
         
         best_tv_titles[tv_name] = {
             'src_image': tv.find('rt-img').get('src'), # parse source image url
+            'last_episode_date': last_episode_date,
             'critics_score': criticsScore,
             'audience_score': audienceScore
         }
@@ -89,6 +103,8 @@ def get_best_tv_shows(page=3):
 
 
 print(get_best_tv_shows())
+
+
 
 
 # def get_imdb_link(title='Reasonable Doubt'):

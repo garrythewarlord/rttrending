@@ -9,7 +9,6 @@ def clear_and_update_database():
 
     new_tv_show.objects.all().delete() # delete all objects in the db
 
-
     data = get_new_tv_shows()
 
     for title in data:
