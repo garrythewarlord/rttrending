@@ -1,0 +1,36 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<!-- <button hx-get="/execute" hx-target="#executing" hx-swap="innerHTML">get new</button>
+<button hx-get="/execute1" hx-target="#executing" hx-swap="innerHTML">get best</button>
+
+
+
+<div id="executing"></div>
+ -->
+
+<ul class="content">
+    {% for title in data %}
+        <li class="content-item">
+            <img class="content-img" src="{{ title.image_src }}" alt="{{ title.title }}">
+            <span class="content-title">{{ title.title }}</span>
+            <div class="content-scores">
+                <!-- <span>&#10072;</span> -->
+                <span class="criticScore">
+                    {{ title.criticScore }}
+                </span>
+                <span class="audienceScore">
+                    {{ title.audienceScore }}
+                </span>
+                <!-- <span>{{ title.last_episode_date }}</span> -->
+            </div>
+            <span class="content-episode-date">{{ title.last_episode_date }}</span>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
