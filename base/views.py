@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse
 
-from script import get_new_tv_shows, get_best_tv_shows
-from .models import new_tv_show, best_tv_show
+from script import get_new_tv_shows, get_best_tv_shows, get_new_movies
+from .models import new_tv_show, best_tv_show, new_movie
 
 from django.db.models import F
 
@@ -24,12 +24,20 @@ def main(request):
 def best(request):
 
     data = best_tv_show.objects.all()
-    remain = len(data) % 6
+    remain = len(data) % 5
     data = data[:len(data) - remain]
 
 
     return render(request, 'main.html', {'data': data})
 
+
+def new_movies(request):
+
+    data = new_movie.objects.all()
+    remain = len(data) % 5
+    data = data[:len(data) - remain]
+
+    return render(request, 'main.html', {'data': data})
 
 def executor(request):
     
@@ -59,7 +67,7 @@ def executor(request):
     return HttpResponse('Updated new tv show db!!')
 
 
-def executor1(request):
+def executor1(request):     
     
     best_tv_show.objects.all().delete()
 
@@ -68,7 +76,7 @@ def executor1(request):
 
     #create instance
     for title in data:
-
+        
         title = title
         image_src = data[title]['src_image']
         criticScore = data[title]['critics_score']
@@ -85,8 +93,32 @@ def executor1(request):
         )
     
 
-
     return HttpResponse('Updated best tv show db!')
 
+def executor2(request):
+
+
+    new_movie.objects.all().delete()
+
+    data = get_new_movies()
+
+    for title in data:
+
+        title = title
+        image_src = data[title]['src_image']
+        criticScore = data[title]['critics_score']
+        audienceScore = data[title]['audience_score']
+        opening_date = data[title]['opening_date']
+
+        new_movie.objects.create(
+            title=title,
+            image_src=image_src,
+            opening_date=opening_date,
+            criticScore=criticScore,
+            audienceScore=audienceScore,
+        )
+
+
+    return HttpResponse('Updated new_movies_in_theaters db!')
 
 

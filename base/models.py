@@ -28,3 +28,16 @@ class best_tv_show(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class new_movie(models.Model):
+    
+    title = models.CharField(max_length=100)
+    image_src = models.URLField()
+    opening_date = models.CharField(max_length=50)
+    criticScore = models.IntegerField() 
+    audienceScore = models.IntegerField() 
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.title

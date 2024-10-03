@@ -7,6 +7,7 @@
 
 <button hx-get="/execute" hx-target="#executing" hx-swap="innerHTML">get new</button>
 <button hx-get="/execute1" hx-target="#executing" hx-swap="innerHTML">get best</button>
+<button hx-get="/execute2" hx-target="#executing" hx-swap="innerHTML">new movies</button>
 
 
 
@@ -18,7 +19,7 @@
         <li class="content-item">
             <img class="content-img" src="{{ title.image_src }}" alt="{{ title.title }}">
             <span class="content-title">{{ title.title }}</span>
-            <div class="content-scores">
+            <div class="content -scores">
                 <!-- <span>&#10072;</span> -->
                 <span class="criticScore">
                     {{ title.criticScore }}
