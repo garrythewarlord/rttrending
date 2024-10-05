@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse
 
-from script import get_new_tv_shows, get_best_tv_shows, get_new_movies
-from .models import new_tv_show, best_tv_show, new_movie
+from script import get_new_tv_shows, get_best_tv_shows, get_new_movies, get_best_movies
+from .models import new_tv_show, best_tv_show, new_movie, best_movie
 
 from django.db.models import F
 
@@ -15,6 +15,7 @@ def main(request):
 
     data = new_tv_show.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total') # get objects by sums of criticScore and audienceScore in descending order. 
     remain = len(data) % 5
+
     data = data[:len(data) - remain]
 
     return render(request, 'main.html', {'data': data})
@@ -34,6 +35,14 @@ def best(request):
 def new_movies(request):
 
     data = new_movie.objects.all()
+    remain = len(data) % 5
+    data = data[:len(data) - remain]
+
+    return render(request, 'main.html', {'data': data})
+
+def best_recent_movies(request):
+
+    data = best_movie.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total')
     remain = len(data) % 5
     data = data[:len(data) - remain]
 
@@ -113,12 +122,39 @@ def executor2(request):
         new_movie.objects.create(
             title=title,
             image_src=image_src,
-            opening_date=opening_date,
+            last_episode_date=opening_date,
             criticScore=criticScore,
             audienceScore=audienceScore,
         )
 
 
     return HttpResponse('Updated new_movies_in_theaters db!')
+
+
+def executor3(request):
+
+
+    best_movie.objects.all().delete()
+
+    data = get_best_movies()
+
+    for title in data:
+
+        title = title
+        image_src = data[title]['src_image']
+        criticScore = data[title]['critics_score']
+        audienceScore = data[title]['audience_score']
+        opening_date = data[title]['opening_date']
+
+        best_movie.objects.create(
+            title=title,
+            image_src=image_src,
+            last_episode_date=opening_date,
+            criticScore=criticScore,
+            audienceScore=audienceScore,
+        )
+
+
+    return HttpResponse('Updated best_movies in db!')
 
 

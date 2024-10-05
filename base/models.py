@@ -34,7 +34,20 @@ class new_movie(models.Model):
     
     title = models.CharField(max_length=100)
     image_src = models.URLField()
-    opening_date = models.CharField(max_length=50)
+    last_episode_date = models.CharField(max_length=50) # opening_date
+    criticScore = models.IntegerField() 
+    audienceScore = models.IntegerField() 
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.title
+    
+
+class best_movie(models.Model):
+    
+    title = models.CharField(max_length=100)
+    image_src = models.URLField()
+    last_episode_date = models.CharField(max_length=50) # opening_date
     criticScore = models.IntegerField() 
     audienceScore = models.IntegerField() 
     created_at = models.DateTimeField(auto_now_add=True, null=True)
