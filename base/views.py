@@ -1,160 +1,108 @@
 from django.shortcuts import render, HttpResponse
 
-from script import get_new_tv_shows, get_best_tv_shows, get_new_movies, get_best_movies
+from script import main_parser
 from .models import new_tv_show, best_tv_show, new_movie, best_movie
 
 from django.db.models import F
+
+from .helpers import create_instance
 
 # Create your views here.
 
 
 
 def main(request):
+    
+    data = {}
+    name = ''
 
+    if request.path == '/':
 
+        data = new_tv_show.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total') # get objects by sums of criticScore and audienceScore in descending order.
+        name = 'New TV Shows'
 
-    data = new_tv_show.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total') # get objects by sums of criticScore and audienceScore in descending order. 
-    remain = len(data) % 5
+    elif request.path == '/best_tv_shows':
+        
+        data = best_tv_show.objects.all()
+        name = 'Best TV Shows'
 
-    data = data[:len(data) - remain]
+    elif request.path == '/new_movies':
+        
+        data = new_movie.objects.all()
+        name = 'New Movies'
 
-    return render(request, 'main.html', {'data': data})
+    elif request.path == '/best_recent_movies':
 
+        data = best_movie.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total')
+        name = 'Best Recent Movies'
 
-
-def best(request):
-
-    data = best_tv_show.objects.all()
-    remain = len(data) % 5
-    data = data[:len(data) - remain]
-
-
-    return render(request, 'main.html', {'data': data})
-
-
-def new_movies(request):
-
-    data = new_movie.objects.all()
-    remain = len(data) % 5
-    data = data[:len(data) - remain]
-
-    return render(request, 'main.html', {'data': data})
-
-def best_recent_movies(request):
-
-    data = best_movie.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total')
     remain = len(data) % 5
     data = data[:len(data) - remain]
 
-    return render(request, 'main.html', {'data': data})
+
+
+    return render(request, 'main.html', {'data': data,
+                                         'name': name})
+
+
 
 def executor(request):
     
-    new_tv_show.objects.all().delete()
+    new_tv_show.objects.all().delete() # when updating db, delete all objects.
 
-    # get current new tv shows
-    data = get_new_tv_shows()
+    base_url = 'https://www.rottentomatoes.com/browse/tv_series_browse/audience:upright~critics:fresh~sort:newest'
 
-    #create instance
-    for title in data:
+    data = main_parser(base_url, 3) # get data based on base_url and return it
+    model = new_tv_show # assign the model reference to model variable
 
-        title = title
-        image_src = data[title]['src_image']
-        criticScore = data[title]['critics_score']
-        audienceScore = data[title]['audience_score']
-        last_episode_date = data[title]['last_episode_date']
+    create_instance(data, model) # pass the data and model reference to create_instance helper
 
-        new_tv_show.objects.create(
-            title=title,
-            image_src=image_src,
-            last_episode_date=last_episode_date,
-            criticScore=criticScore,
-            audienceScore=audienceScore,
-        )
-
-
-    return HttpResponse('Updated new tv show db!!')
+    return HttpResponse('Updated {} database'.format(model.__name__))
 
 
 def executor1(request):     
     
-    best_tv_show.objects.all().delete()
-
-    # get current new tv shows
-    data = get_best_tv_shows()
-
-    #create instance
-    for title in data:
-        
-        title = title
-        image_src = data[title]['src_image']
-        criticScore = data[title]['critics_score']
-        audienceScore = data[title]['audience_score']
-        last_episode_date = data[title]['last_episode_date']
-
-
-        best_tv_show.objects.create(
-            title=title,
-            image_src=image_src,
-            last_episode_date=last_episode_date,
-            criticScore=criticScore,
-            audienceScore=audienceScore,
-        )
+    best_tv_show.objects.all().delete() # when updating db, delete all objects.
     
+    base_url = 'https://www.rottentomatoes.com/browse/tv_series_browse/sort:popular'
 
-    return HttpResponse('Updated best tv show db!')
+    data = main_parser(base_url, 3) # get data based on base_url and return it
+    model = best_tv_show # assign the model reference to model variable
+
+    create_instance(data, model) # pass the data and model reference to create_instance helper
+
+    return HttpResponse('Updated {} database'.format(model.__name__))
+
 
 def executor2(request):
 
 
-    new_movie.objects.all().delete()
+    new_movie.objects.all().delete() # when updating db, delete all objects.
 
-    data = get_new_movies()
-
-    for title in data:
-
-        title = title
-        image_src = data[title]['src_image']
-        criticScore = data[title]['critics_score']
-        audienceScore = data[title]['audience_score']
-        opening_date = data[title]['opening_date']
-
-        new_movie.objects.create(
-            title=title,
-            image_src=image_src,
-            last_episode_date=opening_date,
-            criticScore=criticScore,
-            audienceScore=audienceScore,
-        )
+    base_url = 'https://www.rottentomatoes.com/browse/movies_in_theaters/sort:newest' 
 
 
-    return HttpResponse('Updated new_movies_in_theaters db!')
+    data = main_parser(base_url, 3) # get data based on base_url and return it
+    model = new_movie # assign the model reference to model variable
 
+    create_instance(data, model) # pass the data and model reference to create_instance helper
+
+    return HttpResponse('Updated {} database'.format(model.__name__))
+
+    
 
 def executor3(request):
 
 
-    best_movie.objects.all().delete()
+    best_movie.objects.all().delete() # when updating db, delete all objects.
 
-    data = get_best_movies()
+    base_url = 'https://www.rottentomatoes.com/browse/movies_in_theaters/sort:top_box_office' 
 
-    for title in data:
+    data = main_parser(base_url, 3) # get data based on base_url and return it
+    model = best_movie # assign the model reference to model variable
 
-        title = title
-        image_src = data[title]['src_image']
-        criticScore = data[title]['critics_score']
-        audienceScore = data[title]['audience_score']
-        opening_date = data[title]['opening_date']
+    create_instance(data, model) # pass the data and model reference to create_instance helper
 
-        best_movie.objects.create(
-            title=title,
-            image_src=image_src,
-            last_episode_date=opening_date,
-            criticScore=criticScore,
-            audienceScore=audienceScore,
-        )
+    return HttpResponse('Updated {} database'.format(model.__name__))
 
-
-    return HttpResponse('Updated best_movies in db!')
-
-
+    

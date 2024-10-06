@@ -15,9 +15,7 @@ def clean_score(score):
     return int(float(cleaned)) if cleaned.isdigit() else 0
 
 
-def get_new_tv_shows(page=3):
-
-    base_url = 'https://www.rottentomatoes.com/browse/tv_series_browse/audience:upright~critics:fresh~sort:newest' 
+def main_parser(base_url='', page=3):
 
     if page: # checks if page exists
         base_url += '?page={}'.format(page) # adds pages to query through
@@ -60,133 +58,7 @@ def get_new_tv_shows(page=3):
 
 
 
-def get_best_tv_shows(page=3):
 
-    base_url = 'https://www.rottentomatoes.com/browse/tv_series_browse/sort:popular' 
-
-    if page: # checks if page exists
-        base_url += '?page={}'.format(page) # adds pages to query through
-
-    html = requests.get(base_url) # gets content
-    soup = BeautifulSoup(html.content, 'html.parser') # parses content
-    titles = soup.find_all('div', class_='flex-container') # main title body
-    best_tv_titles = {} # empty dict
-
-
-
-
-    for tv in titles: # iterate through titles
-        tv_name = tv.find('span', class_='p--small').text.replace('\n', '').strip() # get title name
-
-        scores = tv.find_all('rt-text')
-        
-        criticsScore = clean_score(scores[0].text)
-        audienceScore = clean_score(scores[-1].text)
-
-        last_episode_date = tv.find('span', class_='smaller')
-        if last_episode_date:
-            last_episode_date = last_episode_date.text.replace('\n', '').strip()
-        else:
-            last_episode_date = '-'
-        
-        
-        best_tv_titles[tv_name] = {
-            'src_image': tv.find('rt-img').get('src'), # parse source image url
-            'last_episode_date': last_episode_date,
-            'critics_score': criticsScore,
-            'audience_score': audienceScore
-        }
-
-    
-    return best_tv_titles # return titles
-
-
-
-
-
-
-
-def get_new_movies(page=3):
-
-    base_url = 'https://www.rottentomatoes.com/browse/movies_in_theaters/sort:newest' 
-
-    if page: # checks if page exists
-        base_url += '?page={}'.format(page) # adds pages to query through
-
-    html = requests.get(base_url) # gets content
-    soup = BeautifulSoup(html.content, 'html.parser') # parses content
-    titles = soup.find_all('div', class_='flex-container') # main title body
-    new_tv_titles = {} # empty dict    
-
-
-
-
-    for tv in titles: # iterate through titles
-        tv_name = tv.find('span', class_='p--small').text.replace('\n', '').strip() # get title name
-
-        scores = tv.find_all('rt-text')
-        
-        criticsScore = clean_score(scores[0].text)
-        audienceScore = clean_score(scores[-1].text)
-
-        opening_date = tv.find('span', class_='smaller')
-        if opening_date:
-            opening_date = opening_date.text.replace('\n', '').strip()
-        else:
-            opening_date = '-'
-        
-        
-        new_tv_titles[tv_name] = {
-            'src_image': tv.find('rt-img').get('src'), # parse source image url
-            'opening_date': opening_date,
-            'critics_score': criticsScore,
-            'audience_score': audienceScore
-        }
-
-    
-    return new_tv_titles # return titles
-
-
-
-def get_best_movies(page=3):
-
-    base_url = 'https://www.rottentomatoes.com/browse/movies_in_theaters/sort:top_box_office' 
-
-    if page: # checks if page exists
-        base_url += '?page={}'.format(page) # adds pages to query through
-
-    html = requests.get(base_url) # gets content
-    soup = BeautifulSoup(html.content, 'html.parser') # parses content
-    titles = soup.find_all('div', class_='flex-container') # main title body
-    best_tv_titles = {} # empty dict    
-
-
-
-
-    for tv in titles: # iterate through titles
-        tv_name = tv.find('span', class_='p--small').text.replace('\n', '').strip() # get title name
-
-        scores = tv.find_all('rt-text')
-        
-        criticsScore = clean_score(scores[0].text)
-        audienceScore = clean_score(scores[-1].text)
-
-        opening_date = tv.find('span', class_='smaller')
-        if opening_date:
-            opening_date = opening_date.text.replace('\n', '').strip()
-        else:
-            opening_date = '-'
-        
-        
-        best_tv_titles[tv_name] = {
-            'src_image': tv.find('rt-img').get('src'), # parse source image url
-            'opening_date': opening_date,
-            'critics_score': criticsScore,
-            'audience_score': audienceScore
-        }
-
-    
-    return best_tv_titles # return titles
 
 
 
