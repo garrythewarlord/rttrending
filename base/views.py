@@ -1,4 +1,6 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
+from django.contrib import messages
+from django.contrib.auth import logout
 
 from script import main_parser
 from .models import new_tv_show, best_tv_show, new_movie, best_movie
@@ -36,13 +38,20 @@ def main(request):
         data = best_movie.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total')
         name = 'Best Recent Movies'
 
+
+
     remain = len(data) % 5
     data = data[:len(data) - remain]
-
+    
+    
+    if not data: # check if data is empty
+        messages.error(request, 'Trouble loading database')
+    
 
 
     return render(request, 'main.html', {'data': data,
-                                         'name': name})
+                                         'name': name,
+                                         'isAuthenticated': request.user.is_authenticated})
 
 
 
@@ -106,3 +115,8 @@ def executor3(request):
     return HttpResponse('Updated {} database'.format(model.__name__))
 
     
+def logout_view(request):
+    logout(request)
+    response = HttpResponse(status=200)
+    response['HX-Redirect'] = '/'
+    return response

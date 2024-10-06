@@ -10,6 +10,7 @@ Added new_movie parser; small update to media css
 Added best_recent movies parser
 
 - 2024-10-06 \
-Created a single view to handle all url \
-Updated script.py and made it more readable by combining everything into one main function \
-Updated executor functions to appear more concise. 
+Created a single view to handle all url paths \
+Updated script.py and made it more readable by combining everything into single function \
+Updated executor and made them less cluttered. \
+Created controls for manually refreshing databases via admin account. *Need authentication

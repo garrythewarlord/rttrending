@@ -1,39 +1,48 @@
-
+ 
 
 {% extends 'base.html' %}
 
 {% block content %}
 
 
+{% if isAuthenticated %}
 <button hx-get="/execute" hx-target="#executing" hx-swap="innerHTML">get new</button>
 <button hx-get="/execute1" hx-target="#executing" hx-swap="innerHTML">get best</button>
 <button hx-get="/execute2" hx-target="#executing" hx-swap="innerHTML">new movies</button>
 <button hx-get="/execute3" hx-target="#executing" hx-swap="innerHTML">best movies</button>
-
-
+<button style="color: red;" hx-get="/logout" hx-swap="none">logout</button>
 
 <div id="executing"></div>
+{% endif %}
 
-<h3 style="color: white;">{{ name }}</h3>
+{% if data %}
+<h3 style="color: white; margin-left: 15px; font-weight: 300;">{{ name }}</h3>
+{% endif %}
 
 <ul class="content">
-    {% for title in data %}
-        <li class="content-item">
-            <img class="content-img" src="{{ title.image_src }}" alt="{{ title.title }}">
-            <span class="content-title">{{ title.title }}</span>
-            <div class="content -scores">
-                <!-- <span>&#10072;</span> -->
-                <span class="criticScore">
-                    {{ title.criticScore }}
-                </span>
-                <span class="audienceScore">
-                    {{ title.audienceScore }}
-                </span>
-                <!-- <span>{{ title.last_episode_date }}</span> -->
-            </div>
-            <span class="content-episode-date">{{ title.last_episode_date }}</span>
-        </li>
-    {% endfor %}
+    {% if data %}
+        {% for title in data %}
+            <li class="content-item">
+                <img class="content-img" src="{{ title.image_src }}" alt="{{ title.title }}">
+                <span class="content-title">{{ title.title }}</span>
+                <div class="content -scores">
+                    <!-- <span>&#10072;</span> -->
+                    <span class="criticScore">
+                        {{ title.criticScore }}
+                    </span>
+                    <span class="audienceScore">
+                        {{ title.audienceScore }}
+                    </span>
+                    <!-- <span>{{ title.last_episode_date }}</span> -->
+                </div>
+                <span class="content-episode-date">{{ title.last_episode_date }}</span>
+            </li>
+        {% endfor %}
+    {% else %}
+        <h3 style="color: white;">Trouble loading database - please come back later.</h3>
+    {% endif %}
 </ul>
+
+
 
 {% endblock %}
