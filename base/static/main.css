@@ -13,6 +13,8 @@ ul{
     list-style-type: none;
 }
 
+
+
 body, html{
     background-image: url('bg1.jpg');
     background-position: center;
@@ -58,7 +60,6 @@ a, a:hover, a:focus, a:active {
     text-align: center;
     word-wrap: break-word;
 }
-
 
 
 
@@ -139,7 +140,6 @@ a, a:hover, a:focus, a:active {
 
 .criticScore,.audienceScore{
     display: flex;
-
     justify-content: center;
     align-items: center;
 }
@@ -170,11 +170,6 @@ a, a:hover, a:focus, a:active {
 
 .footer{
     margin: 20px;
-}
-
-
-.footer_{
-
 }
 
 

@@ -128,16 +128,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 from celery.schedules import crontab
 
 CELERY_BEAT_SCHEDULE = {
-    'clear-and-update-every-hour': {
-        'task': 'base.task.clear_and_update_database',
-        'schedule': crontab(minute='*/10'),  # Every hour
+    'task': {
+        'task': 'base.tasks.my_scheduled_task',
+        'schedule': crontab(hour=0, minute=0),  # Run every minute
     },
 }
 
 CELERY_TIMEZONE = 'Europe/Vilnius'  # Adjust to your timezone if needed
 
 
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 
-
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

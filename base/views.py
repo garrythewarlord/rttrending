@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 
 from script import main_parser
-from .models import new_tv_show, best_tv_show, new_movie, best_movie
+from .models import new_tv_show, best_tv_show, new_movie, best_movie, soon_in_theater, popular_on_hbo
 
 from django.db.models import F
 
@@ -38,12 +38,20 @@ def main(request):
         data = best_movie.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total')
         name = 'Best Recent Movies'
 
+    elif request.path == '/soon_in_theaters':
 
+        data = soon_in_theater.objects.all()
+        name = 'Soon In Theaters'
+
+    elif request.path == '/popular_on_hbo':
+
+        data = popular_on_hbo.objects.annotate(total=F('criticScore') + F('audienceScore')).order_by('-total')
+        name = 'Popular on HBO'
 
     remain = len(data) % 5
     data = data[:len(data) - remain]
-    
-    
+
+
     if not data: # check if data is empty
         messages.error(request, 'Trouble loading database')
     
@@ -51,7 +59,8 @@ def main(request):
 
     return render(request, 'main.html', {'data': data,
                                          'name': name,
-                                         'isAuthenticated': request.user.is_authenticated})
+                                         'isAuthenticated': request.user.is_authenticated,
+                                         })
 
 
 
@@ -114,9 +123,40 @@ def executor3(request):
 
     return HttpResponse('Updated {} database'.format(model.__name__))
 
+
+def executor4(request):
+
+
+    soon_in_theater.objects.all().delete() # when updating db, delete all objects.
+
+    base_url = 'https://www.rottentomatoes.com/browse/movies_coming_soon/' 
+
+    data = main_parser(base_url, 3) # get data based on base_url and return it
+    model = soon_in_theater # assign the model reference to model variable
+
+    create_instance(data, model) # pass the data and model reference to create_instance helper
+
+    return HttpResponse('Updated {} database'.format(model.__name__))
+
+
+def executor5(request):
+
+
+    popular_on_hbo.objects.all().delete() # when updating db, delete all objects.
+
+    base_url = 'https://www.rottentomatoes.com/browse/tv_series_browse/affiliates:max~sort:popular' 
+
+    data = main_parser(base_url, 3) # get data based on base_url and return it
+    model = popular_on_hbo # assign the model reference to model variable
+
+    create_instance(data, model) # pass the data and model reference to create_instance helper
+
+    return HttpResponse('Updated {} database'.format(model.__name__))
+
+
     
 def logout_view(request):
     logout(request)
     response = HttpResponse(status=200)
     response['HX-Redirect'] = '/'
-    return response
+    return response 

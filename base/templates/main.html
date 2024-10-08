@@ -10,13 +10,18 @@
 <button hx-get="/execute1" hx-target="#executing" hx-swap="innerHTML">get best</button>
 <button hx-get="/execute2" hx-target="#executing" hx-swap="innerHTML">new movies</button>
 <button hx-get="/execute3" hx-target="#executing" hx-swap="innerHTML">best movies</button>
+<button hx-get="/execute4" hx-target="#executing" hx-swap="innerHTML">soon_in_theaters</button>
+<button hx-get="/execute5" hx-target="#executing" hx-swap="innerHTML">popular_on_hbo</button>
+
 <button style="color: red;" hx-get="/logout" hx-swap="none">logout</button>
 
 <div id="executing"></div>
 {% endif %}
 
 {% if data %}
-<h3 style="color: white; margin-left: 15px; font-weight: 300;">{{ name }}</h3>
+<div class="current_section">
+    <h3 style="color: white; margin-left: 15px; font-weight: 300;">{{ name }}</h3>
+</div>
 {% endif %}
 
 <ul class="content">
