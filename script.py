@@ -25,9 +25,6 @@ def main_parser(base_url='', page=3):
     titles = soup.find_all('div', class_='flex-container') # main title body
     trending_tv_titles = {} # empty dict
 
-
-
-
     for tv in titles: # iterate through titles
         tv_name = tv.find('span', class_='p--small').text.replace('\n', '').strip() # get title name
 

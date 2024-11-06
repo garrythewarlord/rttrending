@@ -9,6 +9,7 @@ from django.db.models import F
 
 from .helpers import create_instance
 
+
 # Create your views here.
 
 
@@ -54,7 +55,6 @@ def main(request):
 
     if not data: # check if data is empty
         messages.error(request, 'Trouble loading database')
-    
 
 
     return render(request, 'main.html', {'data': data,
@@ -160,3 +160,20 @@ def logout_view(request):
     response = HttpResponse(status=200)
     response['HX-Redirect'] = '/'
     return response 
+
+
+
+
+def purgedb(request):
+
+    new_tv_show.objects.all().delete()
+    best_tv_show.objects.all().delete()
+    new_movie.objects.all().delete()
+    best_movie.objects.all().delete()
+    soon_in_theater.objects.all().delete()
+    popular_on_hbo.objects.all().delete()
+
+    response = HttpResponse(status=200)
+    response['HX-Redirect'] = '/'
+
+    return response

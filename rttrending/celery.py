@@ -12,6 +12,7 @@ app = Celery('rttrending')
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
 app.config_from_object('django.conf:settings', namespace='CELERY')
+app.conf.task_default_queue = 'default'
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()

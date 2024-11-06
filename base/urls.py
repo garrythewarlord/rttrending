@@ -17,5 +17,6 @@ urlpatterns = [
     path('execute3', views.executor3),
     path('execute4', views.executor4),
     path('execute5', views.executor5),
-    path('logout', views.logout_view)
+    path('logout', views.logout_view),
+    path('purge', views.purgedb)
 ]

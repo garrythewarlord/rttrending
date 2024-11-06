@@ -1,16 +1,20 @@
 from celery import shared_task
-
 from .helpers import create_instance
+
+from datetime import datetime
+
 from script import main_parser
 
 from .models import new_tv_show, best_tv_show, new_movie, best_movie, soon_in_theater, popular_on_hbo
 
-
 @shared_task
 def my_scheduled_task():
 
-    # updating databases
+    with open('celery_run_times.log', 'a+') as log_file:
+        run_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        log_file.write(f'Task ran at: {run_time}\n')
 
+    
     try:
         new_tv_show.objects.all().delete() # when updating db, delete all objects.
         base_url = 'https://www.rottentomatoes.com/browse/tv_series_browse/audience:upright~critics:fresh~sort:newest'
@@ -52,5 +56,6 @@ def my_scheduled_task():
         
     except:
         print("Run into an error.")
-    
+
     return None
+

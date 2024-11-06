@@ -1,9 +1,8 @@
- 
+ {% extends 'base.html' %}
+ {% load static %}
 
-{% extends 'base.html' %}
 
 {% block content %}
-
 
 {% if isAuthenticated %}
 <button hx-get="/execute" hx-target="#executing" hx-swap="innerHTML">get new</button>
@@ -12,9 +11,8 @@
 <button hx-get="/execute3" hx-target="#executing" hx-swap="innerHTML">best movies</button>
 <button hx-get="/execute4" hx-target="#executing" hx-swap="innerHTML">soon_in_theaters</button>
 <button hx-get="/execute5" hx-target="#executing" hx-swap="innerHTML">popular_on_hbo</button>
-
-<button style="color: red;" hx-get="/logout" hx-swap="none">logout</button>
-
+<button style="color: blue;" hx-get="/logout" hx-swap="none">logout</button>
+<button style="color: red; font-weight: 500;" hx-get="/purge" hx-swap="none">purge</button>
 <div id="executing"></div>
 {% endif %}
 
@@ -44,7 +42,10 @@
             </li>
         {% endfor %}
     {% else %}
-        <h3 style="color: white;">Trouble loading database - please come back later.</h3>
+        <div class="error_display_page">
+            <img width="400" height="400" src="{% static 'error.png' %}" alt="error_image">
+            <h3>The database seems to be empty. I wonder why. Maybe I should try later?</h3>
+        </div>
     {% endif %}
 </ul>
 
