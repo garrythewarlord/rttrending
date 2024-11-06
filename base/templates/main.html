@@ -27,18 +27,23 @@
         {% for title in data %}
             <li class="content-item">
                 <img class="content-img" src="{{ title.image_src }}" alt="{{ title.title }}">
-                <span class="content-title">{{ title.title }}</span>
-                <div class="content -scores">
-                    <!-- <span>&#10072;</span> -->
-                    <span class="criticScore">
-                        {{ title.criticScore }}
-                    </span>
-                    <span class="audienceScore">
-                        {{ title.audienceScore }}
-                    </span>
-                    <!-- <span>{{ title.last_episode_date }}</span> -->
+                <div class="content-main">
+                    <span class="content-title">{{ title.title }}</span>
+                    <div class="content-scores">
+                        <!-- <span>&#10072;</span> -->
+                        <span class="criticScore">
+                            {{ title.criticScore }}
+                        </span>
+                        <span class="audienceScore">
+                            {{ title.audienceScore }}
+                        </span>
+                        <a class="ytRedirect" target="_blank" href="https://www.youtube.com/results?search_query={{ title.title }} Trailer">
+                            <img width="25" height="25" src="{% static 'yt_icon.png' %}">
+                        </a>
+                        <!-- <span>{{ title.last_episode_date }}</span> -->
+                    </div>
+                <!-- <span class="content-episode-date">{{ title.last_episode_date }}</span> -->
                 </div>
-                <span class="content-episode-date">{{ title.last_episode_date }}</span>
             </li>
         {% endfor %}
     {% else %}

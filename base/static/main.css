@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 
 :root{
     --white-theme: white;
@@ -13,7 +14,9 @@ ul{
     list-style-type: none;
 }
 
-
+span, a{
+    color: black;
+}
 
 body, html{
     /* background-image: url('bg1.jpg');
@@ -21,19 +24,20 @@ body, html{
     background-size: cover;
     background-repeat: repeat;
     background-color: rgba(0,20,36,255); */
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 
 }
 
 a, a:hover, a:focus, a:active {
     text-decoration: none;
-    color: inherit;
     line-height: 0;
 }
 
 .main{
     max-width: 1600px;
     margin: auto;
-    background-color: rgba(0, 0, 0, 0.5);
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -75,12 +79,16 @@ a, a:hover, a:focus, a:active {
     overflow: hidden;
     flex: 1 1 300px;
     flex-direction: column;
-    margin-bottom: 10px;
+    padding-bottom: 35px;
     /* background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 50%, var(--main-theme) 50%);
     background-size: 100% 200%;
     transition:  scale 0.5s, background-position 0.5s; */
     transition: scale 0.5s;
-    background-color: rgba(0, 0, 0, 0.35);
+}
+
+.content-main{
+    width: 100%;
+    margin-top: 10px;
 }
 
 .content-item:hover{
@@ -104,9 +112,13 @@ a, a:hover, a:focus, a:active {
 
 
 .content-title{
-    text-align: center;
+white-space: none;
+    width: 100%;
+    display: block;
     font-size: 20px;
-    margin: 10px
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
 }
 
 .content-img{
@@ -114,20 +126,24 @@ a, a:hover, a:focus, a:active {
     height: auto;
     max-width: 400px;
     object-fit: cover;
+    border-radius: 10px;
 }
 
 
 .content-scores{
+    width: 100%;
     display: flex;
-    align-items: center;
-    flex-direction: row;
     gap: 0.5rem;
-}
+}   
 
 .content-episode-date{
     margin: 10px;
 }
 
+
+.criticScore{
+    margin-left: 5px;
+}
 
 
 
@@ -159,6 +175,11 @@ a, a:hover, a:focus, a:active {
     margin-right: 5px;
 }
 
+
+.ytRedirect{
+    margin-left: auto;
+    margin-right: 5px;
+}
 
 
 .footer{
