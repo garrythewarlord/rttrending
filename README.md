@@ -1,6 +1,6 @@
 
 
-# WhatsTrend - website that indentifies what tv shows and movies are trending.
+# WhatsTrend - website that indentifies trending tv shows and movies.
 
 
 - 2024-10-04 \
